@@ -50,6 +50,8 @@
             background-attachment: fixed;
         }
 
+        /* Sötét átmenet az oldal alján */
+
         .hero::after {
             content: "";
             position: absolute;
@@ -114,6 +116,7 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
+
             transition: 0.3s;
         }
 
@@ -268,81 +271,6 @@
 
         .btn-secondary:hover {
             background: rgba(255,255,255,0.18);
-        }
-
-        /* =========================
-           ÉLŐ JÁTÉKOSSZÁM
-        ========================= */
-
-        .player-count {
-            margin: 28px auto 0;
-
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-
-            padding: 12px 18px;
-
-            border-radius: 999px;
-
-            background: rgba(0,0,0,0.42);
-
-            border: 1px solid rgba(255,255,255,0.12);
-
-            backdrop-filter: blur(10px);
-
-            box-shadow:
-                0 8px 30px rgba(0,0,0,0.25);
-
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .player-dot {
-            width: 9px;
-            height: 9px;
-
-            border-radius: 50%;
-
-            background: #32d74b;
-
-            box-shadow:
-                0 0 12px rgba(50,215,75,0.75);
-
-            animation: playerPulse 1.5s infinite;
-        }
-
-        .player-count-number {
-            color: #ff3c78;
-            font-weight: 900;
-        }
-
-        .player-count-status {
-            color: #aaa;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .player-count.offline .player-dot {
-            background: #888;
-            box-shadow: none;
-            animation: none;
-        }
-
-        .player-count.offline .player-count-number {
-            color: #aaa;
-        }
-
-        @keyframes playerPulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(0.72);
-                opacity: 0.55;
-            }
         }
 
         /* =========================
@@ -733,11 +661,6 @@
                 flex-direction: column;
                 align-items: center;
             }
-
-            .player-count {
-                font-size: 13px;
-                padding: 11px 15px;
-            }
         }
     </style>
 </head>
@@ -755,7 +678,6 @@
         </div>
 
         <ul>
-
             <li>
                 <a href="#home">Főoldal</a>
             </li>
@@ -771,7 +693,6 @@
             <li>
                 <a href="#join">Csatlakozás</a>
             </li>
-
         </ul>
 
     </nav>
@@ -816,28 +737,6 @@
                 >
                     💬 DISCORD
                 </a>
-
-            </div>
-
-            <div class="player-count" id="playerCount" aria-live="polite">
-
-                <span class="player-dot"></span>
-
-                <span>Jelenleg online:</span>
-
-                <span
-                    class="player-count-number"
-                    id="playerCountNumber"
-                >
-                    -- / 50
-                </span>
-
-                <span
-                    class="player-count-status"
-                    id="playerCountStatus"
-                >
-                    Betöltés...
-                </span>
 
             </div>
 
@@ -1015,7 +914,7 @@
                 </h3>
 
                 <p>
-                    A rendőri intézkedéseket RP-szerűen kell kezelni
+                    A rendőri intézkedéseket kezeld RP-szerűen
                     és tartsd tiszteletben a megfelelő szituációkat.
                 </p>
 
@@ -1324,117 +1223,16 @@
     <script>
 
         /* =========================
-           ÉLŐ ROBLOX JÁTÉKOSSZÁM
-        ========================= */
-
-        const ROBLOX_PLACE_ID = "185655149";
-
-        const MAX_PLAYERS = 50;
-
-        const PLAYER_UPDATE_INTERVAL = 15000;
-
-
-        async function updatePlayerCount() {
-
-            const counter =
-                document.getElementById("playerCount");
-
-            const number =
-                document.getElementById("playerCountNumber");
-
-            const status =
-                document.getElementById("playerCountStatus");
-
-
-            try {
-
-                const response = await fetch(
-                    `https://games.roblox.com/v1/games?universeIds=${ROBLOX_PLACE_ID}`
-                );
-
-
-                if (!response.ok) {
-                    throw new Error("Roblox API hiba");
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                const game =
-                    data.data && data.data[0];
-
-
-                if (!game) {
-                    throw new Error("A játék nem található");
-                }
-
-
-                const playing =
-                    Number(game.playing) || 0;
-
-
-                const maxPlayers =
-                    Number(game.maxPlayers) || MAX_PLAYERS;
-
-
-                number.textContent =
-                    `${playing} / ${maxPlayers}`;
-
-
-                status.textContent =
-                    "Online";
-
-
-                counter.classList.remove("offline");
-
-
-            } catch (error) {
-
-                console.error(
-                    "Játékosszám lekérési hiba:",
-                    error
-                );
-
-
-                number.textContent =
-                    `-- / ${MAX_PLAYERS}`;
-
-
-                status.textContent =
-                    "Nem elérhető";
-
-
-                counter.classList.add("offline");
-
-            }
-
-        }
-
-
-        updatePlayerCount();
-
-
-        setInterval(
-            updatePlayerCount,
-            PLAYER_UPDATE_INTERVAL
-        );
-
-
-        /* =========================
            SZABÁLYZAT NYITÁS/ZÁRÁS
         ========================== */
 
         const ruleBoxes =
             document.querySelectorAll(".rule-box");
 
-
         ruleBoxes.forEach(box => {
 
             const title =
                 box.querySelector(".rule-title");
-
 
             title.addEventListener("click", () => {
 
@@ -1451,7 +1249,6 @@
 
         const cards =
             document.querySelectorAll(".card");
-
 
         const observer =
             new IntersectionObserver(
@@ -1487,7 +1284,6 @@
 
         const nav =
             document.querySelector("nav");
-
 
         window.addEventListener("scroll", () => {
 
